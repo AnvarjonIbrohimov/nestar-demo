@@ -3,36 +3,69 @@ import Head from "next/head";
 import Top from "../Top";
 import Footer from "../Footer";
 import HeaderFilter from "../homepage/HeaderFilter";
+import useDeviceDetect from "@/libs/hooks/useDeviceDetect";
 
 const withLayoutMain = (Component: any) => {
   return (props: any) => {
-    return (
-      <>
-        <Head>
-          <title>Nestar</title>
-        </Head>
+    const device = useDeviceDetect();
 
-        <Stack id="pc-wrap">
-          <Stack id={"top"}>
-            <Top />
-          </Stack>
+    if (device === "mobile") {
+      return (
+        <>
+          <Head>
+            <title>Nestar</title>
+          </Head>
 
-          <Stack className={"header-main"}>
-            <Stack className={"container"}>
-              <HeaderFilter />
+          <Stack id="mobile-wrap">
+            <Stack id={"top"}>
+              <Top />
+            </Stack>
+
+            <Stack id={"main"}>
+              <Component {...props} />
+            </Stack>
+
+            <Stack id={"footer"}>
+              <Footer />
             </Stack>
           </Stack>
+        </>
+      );
+    } else {
+      const device = useDeviceDetect();
 
-          <Stack id={"main"}>
-            <Component {...props} />
-          </Stack>
+      if (device === "mobile") {
+        return <Stack>HOME PAGE MOBILE</Stack>;
+      } else {
+        return (
+          <>
+            <Head>
+              <title>Nestar</title>
+            </Head>
 
-          <Stack id={"footer"}>
-            <Footer />
-          </Stack>
-        </Stack>
-      </>
-    );
+            <Stack id="pc-wrap">
+              <Stack id={"top"}>
+                <Top />
+              </Stack>
+
+              <Stack className={"header-main"}>
+                <Stack className={"container"}>
+                  <HeaderFilter />
+                </Stack>
+              </Stack>
+
+              <Stack id={"main"}>
+                <Component {...props} />
+              </Stack>
+
+              <Stack id={"footer"}>
+                <Footer />
+              </Stack>
+            </Stack>
+          </>
+        );
+      }
+    }
   };
 };
 
